@@ -2,6 +2,8 @@ package validation;
 
 import domain.Student;
 
+import java.util.regex.Pattern;
+
 public class StudentValidator implements Validator<Student> {
 
     /**
@@ -11,25 +13,31 @@ public class StudentValidator implements Validator<Student> {
      */
     @Override
     public void validate(Student entity) throws ValidationException {
-        if(entity.getID().equals("")){
+        if(entity.getID() == null){
             throw new ValidationException("Id incorect!");
         }
-        if(entity.getID() == null){
+        if(entity.getID().equals("")){
             throw new ValidationException("Id incorect!");
         }
         if(entity.getNume() == ""){
             throw new ValidationException("Nume incorect!");
         }
-        if(entity.getGrupa() < 0) {
+        if(entity.getNume() == null){
+            throw new ValidationException("Nume incorect!");
+        }
+        if(!Pattern.compile("[a-zA-Z]+ [a-zA-Z]+").matcher(entity.getNume()).matches()) {
+            throw new ValidationException("Nume incorect!");
+        }
+        if(entity.getGrupa() < 0 || entity.getGrupa() > 999) {
             throw new ValidationException("Grupa incorecta!");
         }
         if(entity.getEmail() == null){
             throw new ValidationException("Email incorect!");
         }
-        if(entity.getNume() == null){
-            throw new ValidationException("Nume incorect!");
-        }
         if(entity.getEmail().equals("")){
+            throw new ValidationException("Email incorect!");
+        }
+        if(!Pattern.compile("[a-zA-Z0-9+_.-]+@[a-zA-Z]+.com").matcher(entity.getEmail()).matches()) {
             throw new ValidationException("Email incorect!");
         }
     }

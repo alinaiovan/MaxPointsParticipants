@@ -1,45 +1,139 @@
 import domain.Student;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.*;
 import service.Service;
-import validation.NotaValidator;
 import validation.StudentValidator;
-import validation.TemaValidator;
 import validation.ValidationException;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AddStudentTest {
-    StudentXMLRepo repo;
-    TemaXMLRepo temaRepo;
-    Service service;
+    private StudentXMLRepo studentFileRepository;
+    private StudentValidator studentValidator;
+    private Service service;
+
+    @BeforeAll
+    public static void createXML() {
+        File xml = new File("fisiere/studentiTest.xml");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(xml))) {
+            writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
+                    "<inbox>" +
+
+                    "</inbox>");
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @BeforeEach
-    void setUp(){
-        repo = new StudentXMLRepo("fisiere/Studenti.xml");
-        temaRepo = new TemaXMLRepo("fisiere/Teme.xml");
-        service = new Service(repo, new StudentValidator(), temaRepo, new TemaValidator(), new NotaXMLRepo("fisiere/Note.xml"), new NotaValidator(repo, temaRepo));
+    public void setup() {
+        this.studentFileRepository = new StudentXMLRepo("fisiere/studentiTest.xml");
+        this.studentValidator = new StudentValidator();
+        this.service = new Service(this.studentFileRepository, this.studentValidator, null, null, null, null);
     }
 
-
-@Test
-    void testValidId(){
-        Student student = new Student("2222", "gigel", 222, "gigimail" );
-    var result  = repo.save(student);
-    assertNull(result);
-    repo.delete(student.getID());
-}
+    @AfterAll
+    public static void removeXML() {
+        new File("fisiere/studentiTest.xml").delete();
+    }
 
     @Test
-    void testInvalidId(){
-        Student student = new Student("", "ana", 222, "gigimail" );
-        //var result  = repo.save(student);
-        Exception exception = assertThrows(ValidationException.class, () -> {service.addStudent(student);});
-        String expectedMessage = "Id incorect!";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-        //assertThrowsExactly(ValidationException, result);
+    public void TestAddStudent_ValidStudent_StudentAddedCorrectly() {
+        Student newStudent = new Student("1111", "a b", 999, "aa@yahoo.com");
+        this.service.addStudent(newStudent);
+        assertEquals(this.service.getAllStudenti().iterator().next(), newStudent);
     }
 
+    @Test
+    public void TestAddStudent_NegativeStudentGroup() {
+        Student newStudent = new Student("1111", "a b", -5, "aa@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_StudentGroupTooLarge() {
+        Student newStudent = new Student("1111", "a b", 1000, "aa@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_EmptyStudentName() {
+        Student newStudent = new Student("1111", "", 999, "aa@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_NullStudentName() {
+        Student newStudent = new Student("1111", null, 999, "aa@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_StudentNameContainsIllegalSymbols() {
+        Student newStudent = new Student("1111", "aa11 bb", 999, "aa@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_StudentNameIsJustOneWord() {
+        Student newStudent = new Student("1111", "aa", 999, "aa@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_EmptyStudentId() {
+        Student newStudent = new Student("", "aa bb", 999, "aa@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_NullStudentId() {
+        Student newStudent = new Student(null, "aa bb", 999, "aa@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_EmptyStudentEmail() {
+        Student newStudent = new Student("1111", "aa bb", 999, "");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_NullStudentEmail() {
+        Student newStudent = new Student("1111", "aa bb", 999, null);
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_WrongStudentEmailLocalPart() {
+        Student newStudent = new Student("1111", "aa bb", 999, "@yahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_WrongStudentEmailDomain() {
+        Student newStudent = new Student("1111", "aa bb", 999, "aa@yahoo.con");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_DigitInStudentEmailDomain() {
+        Student newStudent = new Student("1111", "aa bb", 999, "aa@yahoo1.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
+
+    @Test
+    public void TestAddStudent_NoAtSymbolInStudentEmail() {
+        Student newStudent = new Student("1111", "aa bb", 999, "aayahoo.com");
+        assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
+    }
 }
