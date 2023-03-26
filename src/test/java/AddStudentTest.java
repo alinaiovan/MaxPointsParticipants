@@ -47,93 +47,93 @@ public class AddStudentTest {
     }
 
     @Test
-    public void TestAddStudent_ValidStudent_StudentAddedCorrectly() {
-        Student newStudent = new Student("1111", "a b", 999, "aa@yahoo.com");
+    public void validStudent() {
+        Student newStudent = new Student("1234", "Alin Bogdan", 123, "alin@yahoo.com");
         this.service.addStudent(newStudent);
         assertEquals(this.service.getAllStudenti().iterator().next(), newStudent);
     }
 
     @Test
-    public void TestAddStudent_NegativeStudentGroup() {
-        Student newStudent = new Student("1111", "a b", -5, "aa@yahoo.com");
+    public void negativeStudentGroup() {
+        Student newStudent = new Student("1234", "Alin Bogdan", -5, "alin@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_StudentGroupTooLarge() {
-        Student newStudent = new Student("1111", "a b", 1000, "aa@yahoo.com");
+    public void studentGroupTooLarge() {
+        Student newStudent = new Student("1234", "Alin Bogdan", 1000, "alin@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_EmptyStudentName() {
-        Student newStudent = new Student("1111", "", 999, "aa@yahoo.com");
+    public void emptyStudentName() {
+        Student newStudent = new Student("1234" , "", 123, "alin@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_NullStudentName() {
-        Student newStudent = new Student("1111", null, 999, "aa@yahoo.com");
+    public void nullStudentName() {
+        Student newStudent = new Student("1234", null, 123, "alin@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_StudentNameContainsIllegalSymbols() {
-        Student newStudent = new Student("1111", "aa11 bb", 999, "aa@yahoo.com");
+    public void studentNameContainsIllegalSymbols() {
+        Student newStudent = new Student("1234", "Alin Bogdan555", 123, "alin@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_StudentNameIsJustOneWord() {
-        Student newStudent = new Student("1111", "aa", 999, "aa@yahoo.com");
+    public void studentNameIsJustOneWord() {
+        Student newStudent = new Student("1234", "Alin", 123, "alin@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_EmptyStudentId() {
-        Student newStudent = new Student("", "aa bb", 999, "aa@yahoo.com");
+    public void emptyStudentId() {
+        Student newStudent = new Student("", "Alin Bogdan", 123, "alin@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_NullStudentId() {
-        Student newStudent = new Student(null, "aa bb", 999, "aa@yahoo.com");
+    public void nullStudentId() {
+        Student newStudent = new Student(null, "Alin Bogdan", 123, "alin@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_EmptyStudentEmail() {
-        Student newStudent = new Student("1111", "aa bb", 999, "");
+    public void emptyStudentEmail() {
+        Student newStudent = new Student("1234", "Alin Bogdan", 123, "");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_NullStudentEmail() {
-        Student newStudent = new Student("1111", "aa bb", 999, null);
+    public void nullStudentEmail() {
+        Student newStudent = new Student("1234", "Alin Bogdan", 123, null);
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_WrongStudentEmailLocalPart() {
-        Student newStudent = new Student("1111", "aa bb", 999, "@yahoo.com");
+    public void wrongStudentEmailLocalPart() {
+        Student newStudent = new Student("1234", "Alin Bogdan", 123, "@yahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_WrongStudentEmailDomain() {
-        Student newStudent = new Student("1111", "aa bb", 999, "aa@yahoo.con");
+    public void wrongStudentEmailDomain() {
+        Student newStudent = new Student("1234", "Alin Bogdan", 123, "alin@yahoo.con");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_DigitInStudentEmailDomain() {
-        Student newStudent = new Student("1111", "aa bb", 999, "aa@yahoo1.com");
+    public void digitInStudentEmailDomain() {
+        Student newStudent = new Student("1234", "Alin Bogdan", 123, "alin@yahoo1.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 
     @Test
-    public void TestAddStudent_NoAtSymbolInStudentEmail() {
-        Student newStudent = new Student("1111", "aa bb", 999, "aayahoo.com");
+    public void noAtSymbolInStudentEmail() {
+        Student newStudent = new Student("1234", "Alin Bogdan", 123, "alinyahoo.com");
         assertThrows(ValidationException.class, () -> this.service.addStudent(newStudent));
     }
 }
