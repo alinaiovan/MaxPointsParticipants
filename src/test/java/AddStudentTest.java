@@ -47,7 +47,7 @@ public class AddStudentTest {
     }
 
     @Test
-    public void validStudent() {
+    public void validStudent_test() {
         Student newStudent = new Student("1234", "Alin Bogdan", 123, "alin@yahoo.com");
         this.service.addStudent(newStudent);
         assertEquals(this.service.getAllStudenti().iterator().next(), newStudent);
