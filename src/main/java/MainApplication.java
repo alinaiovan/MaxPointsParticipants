@@ -1,6 +1,3 @@
-package ssvv.example;
-
-
 import repository.NotaXMLRepo;
 import repository.StudentXMLRepo;
 import repository.TemaXMLRepo;
