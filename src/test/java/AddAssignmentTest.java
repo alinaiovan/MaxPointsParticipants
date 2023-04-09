@@ -53,14 +53,56 @@ public class AddAssignmentTest {
 
     @Test
     public void validAssignment_test() {
-        Tema newTema = new Tema("1", "SSVV Lab2 bbt", 4, 2);
+        Tema newTema = new Tema("1", "SSVV Lab3", 4, 2);
         this.service.addTema(newTema);
         assertEquals(this.service.getAllTeme().iterator().next(), newTema);
     }
 
     @Test
     public void emptyAssignmentId(){
-        Tema newTema = new Tema("", "SSVV Lab2 bbt", 4, 2);
+        Tema newTema = new Tema("", "SSVV Lab3", 4, 2);
+        assertThrows(ValidationException.class, () -> this.service.addTema(newTema));
+    }
+
+    @Test
+    void nullAssignmentId() {
+        Tema newTema = new Tema(null, "SSVV Lab3", 1, 1);
+        assertThrows(ValidationException.class, () -> this.service.addTema(newTema));
+    }
+
+    @Test
+    void emptyAssignmentDescription() {
+        Tema newTema = new Tema("1", "", 1, 1);
+        assertThrows(ValidationException.class, () -> this.service.addTema(newTema));
+    }
+
+    @Test
+    void nullAssignmentDescription() {
+        Tema newTema = new Tema("1", null, 1, 1);
+        assertThrows(ValidationException.class, () -> this.service.addTema(newTema));
+    }
+
+    @Test
+    void deadlineTooLarge() {
+        Tema newTema = new Tema("1", "SSVV Lab3", 15, 1);
+        assertThrows(ValidationException.class, () -> this.service.addTema(newTema));
+    }
+
+    @Test
+    void receivedTooSmall() {
+        Tema newTema = new Tema("1", "SSVV Lab3", 1, 0);
+        assertThrows(ValidationException.class, () -> this.service.addTema(newTema));
+    }
+
+    @Test
+    void receivedTooLarge() {
+        Tema newTema = new Tema("1", "SSVV Lab3", 0, 15);
+        assertThrows(ValidationException.class, () -> this.service.addTema(newTema));
+    }
+
+    @Test
+    void receivedLargerThanDeadline() {
+        Tema newTema = new Tema("1", "SSVV Lab3", 5, 6);
         assertThrows(ValidationException.class, () -> this.service.addTema(newTema));
     }
 }
