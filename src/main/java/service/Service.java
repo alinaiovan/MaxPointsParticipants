@@ -160,7 +160,7 @@ public class Service {
      * @param feedback - feedback-ul notei
      * @return null daca nota a fost adaugata sau nota daca aceasta exista deja
      */
-    public double addNota(Nota nota, String feedback){
+    public Nota addNota(Nota nota, String feedback){
         notaValidator.validate(nota);
         Student student = studentFileRepository.findOne(nota.getIdStudent());
         Tema tema = temaFileRepository.findOne(nota.getIdTema());
@@ -185,7 +185,7 @@ public class Service {
         } catch (IOException exception){
             throw new ValidationException(exception.getMessage());
         }
-        return nota.getNota();
+        return nota;
     }
 
     /**
