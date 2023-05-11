@@ -101,7 +101,7 @@ public class IncrementalIntegrationMockTest {
     @Test
     public void testAddStudentAndAssignmentAndGrade() {
         Student student = new Student("222", "ana", 931, "ana@gmail.com");
-        Tema tema = new Tema("222", "a", 1, 2);
+        Tema tema = new Tema("222", "a", 5, 8);
         Nota nota = new Nota("222", "222", "222", 10, LocalDate.now());
 
 
@@ -125,8 +125,8 @@ public class IncrementalIntegrationMockTest {
             Assertions.assertNull(tema1_test);
 
             Nota nota1_test = service.addNota(nota, "ok");
-            Assertions.assertEquals(1.0, nota.getNota());
-            Assertions.assertNull(nota1_test);
+            Assertions.assertEquals(7.5, nota.getNota());
+            Assertions.assertEquals(nota1_test.getNota(), 7.5);
 
         } catch (ValidationException e) {
             e.printStackTrace();
