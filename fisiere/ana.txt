@@ -16,3 +16,21 @@ Nota: 7.5
 Predata in saptamana: 6
 Deadline: 5
 Feedback: ok
+
+Tema: 222
+Nota: 10.0
+Predata in saptamana: 10
+Deadline: 10
+Feedback: ok
+
+Tema: 222
+Nota: 10.0
+Predata in saptamana: 10
+Deadline: 10
+Feedback: ok
+
+Tema: 222
+Nota: 10.0
+Predata in saptamana: 10
+Deadline: 10
+Feedback: ok
